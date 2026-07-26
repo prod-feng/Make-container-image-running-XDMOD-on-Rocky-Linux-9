@@ -78,7 +78,7 @@ chmod a+x /usr/bin/run-xdmod
 Now build the image:
 
 ```
-singularity build --fakeroot  rocky9-sandbox-xdmod.sif rocky9-sandbox/
+singularity build --fakeroot  rocky9-sandbox-xdmod.sif rocky9-xdmod.def
 ```
 
 ## 4) Start and initialize the image
