@@ -21,7 +21,7 @@ dnf install https://rpms.remirepo.net/enterprise/remi-release-9.rpm -y
 dnf module reset php
 dnf module enable php:remi-7.4 -y
 # Install other packages
-dnf install php php-cli php-fpm php-mysqlnd php-zip php-devel php-gd php-mcrypt php-mbstring php-curl php-xml php-pear php-bcmath php-json php-pecl-apcu fuse-common squashfuse fuse-overlayfs kernel-modules-core -y --allowerasing
+dnf install php php-cli php-fpm php-mysqlnd php-zip php-devel php-gd php-mcrypt php-mbstring php-curl php-xml php-pear php-bcmath php-json php-pecl-apcu fuse-common squashfuse fuse-overlayfs kernel-modules-core sudo procps tzdata vim-enhanced vim-minimal -y --allowerasing
 # Install XDMOD
 dnf install https://github.com/ubccr/xdmod/releases/download/v11.0.3-2/xdmod-11.0.3-2.el8.noarch.rpm
 # Copy and modify the httpd conf for XDMOD
@@ -38,4 +38,82 @@ Listen 4430 https  (ssl.conf)
     # The ServerName and ServerAdmin parameters should be updated.
     ServerName x.x.x.x (xdmod.conf, compatible to your server)
 ```
+NB: the container instance does not support systemd service. So we will have to prepare our own startup script to do all these things, like start httpd service, start mysql db,etc.
+
+The XDMOD does not support MYSQL 8 very well. So we will use Mariadb10 instead:
+
+```
+yum install mariadb
+```
+
+Since we can not run systemctl to manage mariadb service,  #we have take care of its initializtion later.
+
+Prepare a script as a runscript for the container image, save it in /usr/binrun-xdmod
+
+```
+Singularity> cat /usr/bin/run-xdmod 
+#!/bin/bash
+#Startup script for the XDMOD image
+#Called from rockylinux9-xdmod.def
+#
+#Start httpd
+httpd -k start
+#
+#Start PHP-FPM service
+/usr/sbin/php-fpm --nodaemonize &
+#
+#Start Mariadb 
+sudo -u mysql mysqld  --skip-networking &
+```
+
+Change this script to be excutable:
+
+```
+chmod a+x /usr/bin/run-xdmod
+```
+
+ 
 ## 3) Make the final image file using the rocklinux9-xdmod.def
+
+Now build the image:
+
+```
+singularity build --fakeroot  rocky9-sandbox-xdmod.sif rocky9-sandbox/
+```
+
+## 4) Start and initialize the image
+
+
+Before start the image, setup a work folder to run XDMOD, to save the log files, and most importantly where to store the Mariadb database files. E.g., 
+
+```
+mkdir /tmp/test-xdmod/var/log
+mkdir /tmp/test-xdmod/run
+mkdir /tmp/test-xdmod/var/lib
+
+```
+The /tmp/test-xdmod/var/lib will be owned by user "mysql" inside the image instance, mapped to the Subuid/Subgid later by the "run-xdmod" script.
+
+Now start:
+```
+singularity  instance start --fakeroot -B /tmp/test-xdmod/var/log:/var/log -B /tmp/test-xdmod/run:/run -B /tmp/test-xdmod/var/lib:/var/lib /tmp/rocky9-xdmod-mariadb.sif myxdmod
+```
+
+Still we wil need final touch:
+
+```
+#Get into the instance
+singularity shell instance://myxdmod
+
+# Initialize Mariadb data files(without them mariadb will fail):
+mariadb-install-db --user=mysql  --basedir=/usr --datadir=/var/lib/mysql
+#re-start mariadb. (only this time,it is not needed anymore later)
+sudo -u mysql mysqld  --skip-networking &
+```
+
+Now you can start "xdmod-shredder" and "xdmod-ingestor".
+
+
+There are many more things you can tune again from the SANDBOX, and then rebuild the image.
+
+
