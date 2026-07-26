@@ -1,0 +1,13 @@
+Bootstrap: yum
+OSVersion: 9
+
+# A simple def fle to pull a base Rocky Linux 9.8 OS using YUM.
+MirrorURL: http://mirror.rnet.missouri.edu/rocky/9.8/BaseOS/x86_64/os/
+Include: yum
+
+%runscript
+    echo "No runscript here yet..."
+
+
+%post
+    echo "Done the container"
