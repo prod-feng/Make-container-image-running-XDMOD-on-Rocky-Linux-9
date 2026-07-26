@@ -1,0 +1,21 @@
+Bootstrap: localimage
+From: /tmp/rocky9-sandbox
+
+# Def file to build image (.sif) using the sandbox folder
+  
+%runscript
+    # set mysql permissions
+    chown mysql:  /var/log/mariadb
+    chown mysql:  /var/lib/mysql
+    #rm /var/lib/mysql/*
+    chmod og-rx /var/lib/mysql
+    chown mysql:  /run/mariadb
+    #difference beween mariadb and mysql
+    #mysqld --initialize-insecure --user=mysql --datadir=/var/lib/mysql --console
+    mariadb-install-db --user=mysql  --basedir=/usr --datadir=/var/lib/mysql
+
+    exec /usr/bin/run-xdmod "$@"
+
+
+%startscript
+    exec /usr/bin/run-xdmod "$@"
