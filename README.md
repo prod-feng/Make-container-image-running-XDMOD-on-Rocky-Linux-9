@@ -1,5 +1,9 @@
 # Make-container-image-running-XDMOD-on-Rocky-Linux-9
-Make container image running XDMOD on Rocky Linux 9, Singularity and apptainer
+Make container image running XDMOD on Rocky Linux 9, Singularity and apptainer. 
+
+Using sandbox to make it more versatile and easy to be tuned to diffrent systems.
+
+singularity-ce version 4.3.7-1.el9, Rocky 9.
 
 ## 1) Make a sandbox using the rocklinux9-yum.def
 
