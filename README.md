@@ -18,16 +18,26 @@ singularity build --force --fakeroot --sandbox rocky9-sandbox/ /tmp/xdmod/rocky9
 ```
 #Start sandbox in writable mode
 singularity shell --writable --fakeroot rocky9-sandbox/
+
+
 #generate SSL key for HTTTPD
 openssl req -newkey rsa:2048 -nodes -keyout /etc/pki/tls/private/localhost.key -x509 -days 3650 -out /etc/pki/tls/certs/localhost.crt
+
+
 #Install PHP 7.4. XDMOD does not support PHP8+ yet.
 dnf install https://rpms.remirepo.net/enterprise/remi-release-9.rpm -y
 dnf module reset php
 dnf module enable php:remi-7.4 -y
+
+
 # Install other packages
 dnf install php php-cli php-fpm php-mysqlnd php-zip php-devel php-gd php-mcrypt php-mbstring php-curl php-xml php-pear php-bcmath php-json php-pecl-apcu fuse-common squashfuse fuse-overlayfs kernel-modules-core sudo procps tzdata vim-enhanced vim-minimal -y --allowerasing
+
+
 # Install XDMOD
 dnf install https://github.com/ubccr/xdmod/releases/download/v11.0.3-2/xdmod-11.0.3-2.el8.noarch.rpm
+
+
 # Copy and modify the httpd conf for XDMOD
 cp /usr/share/xdmod/templates/apache.conf  /etc/httpd/conf.d/xdmod.conf 
 ```
