@@ -46,7 +46,7 @@ The XDMOD does not support MYSQL 8 very well. So we will use Mariadb10 instead:
 yum install mariadb
 ```
 
-Since we can not run systemctl to manage mariadb service,  #we have take care of its initializtion later.
+Since we can not run systemctl to manage mariadb service,  we will take care of its initializtion later.
 
 Prepare a script as a runscript for the container image, save it in /usr/binrun-xdmod
 
