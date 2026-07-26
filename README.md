@@ -34,7 +34,7 @@ For the /etc/httpd/conf.d/ssl.conf , and the new /etc/httpd/conf.d/xdmod.conf
 ```
 Listen 4430 https  (ssl.conf)
 -------------------
-<VirtualHost *:4430>
+<VirtualHost *:4430> (xdmod.conf )
     # The ServerName and ServerAdmin parameters should be updated.
     ServerName x.x.x.x (xdmod.conf, compatible to your server)
 ```
