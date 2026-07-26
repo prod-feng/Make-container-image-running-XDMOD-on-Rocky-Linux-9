@@ -10,6 +10,8 @@ singularity-ce version 4.3.7-1.el9, Rocky 9.
 ```
 mkdir /tmp/rocky-sandbox
 cd /tmp/rocky-sandbox
+
+
 singularity build --force --fakeroot --sandbox rocky9-sandbox/ /tmp/xdmod/rocky9-yum.def
 ```
 
@@ -43,16 +45,18 @@ cp /usr/share/xdmod/templates/apache.conf  /etc/httpd/conf.d/xdmod.conf
 ```
 
 For the /etc/httpd/conf.d/ssl.conf , and the new /etc/httpd/conf.d/xdmod.conf 
- change the listen port to a high number, that regular user can use on the host server and instance of the image, e.g.:
+ change the listen port to a high number, which a regular user can use on the host server and also on the instance of the container image, e.g.:
  
 ```
 Listen 4430 https  (ssl.conf)
+
 -------------------
+
 <VirtualHost *:4430> (xdmod.conf )
     # The ServerName and ServerAdmin parameters should be updated.
     ServerName x.x.x.x (xdmod.conf, compatible to your server)
 ```
-NB: the container instance does not support systemd service. So we will have to prepare our own startup script to do all these things, like start httpd service, start mysql db,etc.
+
 
 The XDMOD does not support MYSQL 8 very well. So we will use Mariadb10 instead:
 
@@ -61,6 +65,8 @@ yum install mariadb
 ```
 
 Since we can not run systemctl to manage mariadb service,  we will take care of its initializtion later.
+
+NB: the container instance does not support systemd service. So we will have to prepare our own startup script to do all these things, like start httpd service, start mysql db,etc.
 
 Prepare a script as a runscript for the container image, save it in /usr/binrun-xdmod
 
@@ -121,6 +127,8 @@ singularity shell instance://myxdmod
 
 # Initialize Mariadb data files(without them mariadb will fail):
 mariadb-install-db --user=mysql  --basedir=/usr --datadir=/var/lib/mysql
+
+
 #re-start mariadb. (only this time,it is not needed anymore later)
 sudo -u mysql mysqld  --skip-networking &
 ```
