@@ -92,6 +92,12 @@ Change this script to be excutable:
 chmod a+x /usr/bin/run-xdmod
 ```
 
+This script will be called in "rockylinux9-xdmod.def" when you build the final image:
+
+```
+exec /usr/bin/run-xdmod "$@"
+```
+
 Finnaly run "xdmod-setup" to configure the XDMOD.
 
 ```
