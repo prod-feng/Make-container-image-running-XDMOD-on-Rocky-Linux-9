@@ -92,7 +92,18 @@ Change this script to be excutable:
 chmod a+x /usr/bin/run-xdmod
 ```
 
- 
+Finnaly run "xdmod-setup" to configure the XDMOD.
+
+```
+xdmod-setup
+
+
+# Or if you have already configured XDMOD, them copy these files to /etc/xdmod folder.
+
+portal_settings.ini
+resource_specs.json
+resources.json
+```
 ## 3) Make the final image file using the rocklinux9-xdmod.def
 
 Now build the image:
