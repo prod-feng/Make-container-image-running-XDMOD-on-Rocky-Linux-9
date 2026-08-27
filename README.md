@@ -110,7 +110,9 @@ This script will be called in "rockylinux9-xdmod.def" when you build the final i
 exec /usr/bin/run-xdmod "$@"
 ```
 
-Finnaly run "xdmod-setup" to configure the XDMOD.
+### Finnaly run "xdmod-setup" to configure the XDMOD database.
+
+You do not need to setup everything, but most important part is the database and tables.
 
 ```
 xdmod-setup
