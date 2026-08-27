@@ -160,9 +160,11 @@ singularity shell instance://myxdmod
 # Initialize Mariadb data files(without them mariadb will fail):
 mariadb-install-db --user=mysql  --basedir=/usr --datadir=/var/lib/mysql
 
-
 #re-start mariadb. (only this time,it is not needed anymore later)
 sudo -u mysql mysqld  --skip-networking &
+
+#And you can also start setup database here too, if your BIND  a writable --bind /xx/etc/xdmod:/etc/xdmod when run the container.
+
 ```
 
 Now you can start "xdmod-shredder" and "xdmod-ingestor".
