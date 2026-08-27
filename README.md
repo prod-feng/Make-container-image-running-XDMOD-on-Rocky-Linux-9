@@ -5,6 +5,18 @@ Using sandbox to make it more versatile and easy to be tuned to diffrent systems
 
 singularity-ce version 4.3.7-1.el9, Rocky 9. XDMOD 11.0.3-2.
 
+## N.B. version incompatibility:
+singularity-ce 4.5 does not work with "Bootstrap: yum". The error message you get is(should be a bug somewhere):
+```
+FATAL:   While performing build: conveyor failed to get: while generating yum config: while creating /tmp/build-temp-3875677088/rootfs/etc/bootstrap-yum.conf: openat /etc/bootstrap-yum.conf: path escapes from parent
+``
+
+If you switch to bootstrap from Docker, then the sandbox can work, but at the final SIF building stage, it will fail(bug? to improvement for DOCKER bootstrap):
+
+```
+FATAL:   While performing build: packer failed to pack: while inserting base environment: build: failed to make environment symlinks: symlinkat /.singularity.d/runscript singularity: file exists
+```
+
 ## 1) Make a sandbox using the rocklinux9-yum.def
 
 ```
