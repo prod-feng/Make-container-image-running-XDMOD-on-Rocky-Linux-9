@@ -111,7 +111,7 @@ exec /usr/bin/run-xdmod "$@"
 ```
 
 ### Finnaly run "xdmod-setup" to configure the XDMOD database.
-
+(If you have a backup of /etc/xdmod folder, you can skip this step, and later bind it when run the container. If it is writable, you can also setup database after start the container)
 You do not need to setup everything, but most important part is the database and tables.
 
 Inside the sandbox instance:
