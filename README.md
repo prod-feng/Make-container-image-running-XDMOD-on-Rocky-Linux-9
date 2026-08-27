@@ -114,6 +114,7 @@ exec /usr/bin/run-xdmod "$@"
 
 You do not need to setup everything, but most important part is the database and tables.
 
+Inside the sandbox instance:
 ```
 xdmod-setup
 
