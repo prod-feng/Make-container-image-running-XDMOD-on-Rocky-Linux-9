@@ -144,6 +144,14 @@ mkdir /tmp/test-xdmod/run
 mkdir /tmp/test-xdmod/var/lib
 
 ```
+
+or you can do it by each folder:
+
+```
+mkdir -p /tmp/test-xdmod/{lib/{httpd,mysql},log/{httpd,php-fpm,xdmod,mariadb},run/{httpd,php-fpm,mariadb}}
+
+```
+
 The /tmp/test-xdmod/var/lib will be owned by user "mysql" inside the image instance, mapped to the Subuid/Subgid later by the "run-xdmod" script.
 
 Now start:
@@ -156,6 +164,11 @@ Still we wil need final touch:
 ```
 #Get into the instance
 singularity shell instance://myxdmod
+
+#change ownership for Mariadb folders.
+chown mysql:  /var/log/mysql
+chown mysql:  /var/lib/mysql
+chown mysql: /run/mysqld 
 
 # Initialize Mariadb data files(without them mariadb will fail):
 mariadb-install-db --user=mysql  --basedir=/usr --datadir=/var/lib/mysql
